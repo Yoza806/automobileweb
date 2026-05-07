@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+
+<section class="product-detail">
+  <img src="<%= product.image %>" alt="<%= product.name %>">
+  <div class="product-detail-copy">
+    <p class="eyebrow"><%= product.category %></p>
+    <h1><%= product.name %></h1>
+    <p class="detail-vehicle"><%= product.vehicle %></p>
+    <p><%= product.description %></p>
+    <div class="detail-price">
+      <% if (product.originalPrice && product.originalPrice > product.price) { %>
+        <del class="original-price"><%= money(product.originalPrice) %></del>
+      <% } %>
+      <strong class="selling-price"><%= money(product.price) %></strong>
+      <span><%= product.stock %> in stock</span>
+    </div>
+    <a class="button primary detail-order" href="<%= whatsappLink(product) %>" target="_blank" rel="noopener">Order through WhatsApp</a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,62 @@
+<%- include('partials/header') %>
+
+<section class="filters" aria-label="Product filters">
+  <form action="/shop" method="GET" class="filter-form">
+    <label>
+      <span>Search</span>
+      <input type="search" name="search" value="<%= search %>" placeholder="Brake pads, Civic, oil...">
+    </label>
+    <label>
+      <span>Category</span>
+      <select name="category">
+        <option value="All" <%= selectedCategory === 'All' ? 'selected' : '' %>>All categories</option>
+        <% categories.forEach((category) => { %>
+          <option value="<%= category %>" <%= selectedCategory === category ? 'selected' : '' %>><%= category %></option>
+        <% }) %>
+      </select>
+    </label>
+    <button class="button primary" type="submit">Filter</button>
+  </form>
+</section>
+
+<section id="products" class="product-section">
+  <div class="section-heading">
+    <p class="eyebrow">Parts catalog</p>
+    <h2>Available vehicle parts</h2>
+  </div>
+
+  <% if (products.length === 0) { %>
+    <div class="empty-state">
+      <h3>No parts found</h3>
+      <p>Try a different keyword or category.</p>
+    </div>
+  <% } %>
+
+  <div class="product-grid">
+    <% products.forEach((product) => { %>
+      <article class="product-card">
+        <img src="<%= product.image %>" alt="<%= product.name %>">
+        <div class="product-card-body">
+          <p class="product-category"><%= product.category %></p>
+          <h3><%= product.name %></h3>
+          <p><%= product.vehicle %></p>
+          <div class="product-meta">
+            <div class="price-box">
+              <% if (product.originalPrice && product.originalPrice > product.price) { %>
+                <del class="original-price"><%= money(product.originalPrice) %></del>
+              <% } %>
+              <strong><%= money(product.price) %></strong>
+            </div>
+            <span><%= product.stock %> in stock</span>
+          </div>
+          <div class="card-actions">
+            <a class="button secondary" href="/product/<%= product.id %>">Details</a>
+            <a class="button primary" href="<%= whatsappLink(product) %>" target="_blank" rel="noopener">Order through WhatsApp</a>
+          </div>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

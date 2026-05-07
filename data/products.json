@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Performance Brake Pad Set",
+    "category": "Brakes",
+    "vehicle": "Toyota Corolla 2018-2024",
+    "price": 79.99,
+    "stock": 18,
+    "image": "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?auto=format&fit=crop&w=900&q=80",
+    "description": "Low-dust ceramic brake pads with quiet stopping power for daily driving."
+  },
+  {
+    "id": 2,
+    "name": "Synthetic Engine Oil 5W-30",
+    "category": "Engine",
+    "vehicle": "Universal",
+    "price": 36.5,
+    "stock": 42,
+    "image": "https://images.unsplash.com/photo-1635437536607-b8572f443763?auto=format&fit=crop&w=900&q=80",
+    "description": "Premium full synthetic oil designed for cleaner engines and smoother starts."
+  },
+  {
+    "id": 4,
+    "name": "All-Terrain Shock Absorber",
+    "category": "Suspension",
+    "vehicle": "Nissan Navara 2015-2024",
+    "price": 148.75,
+    "stock": 7,
+    "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80",
+    "description": "Heavy-duty shock absorber tuned for rough roads, payloads, and weekend trails."
+  },
+  {
+    "id": 5,
+    "name": "PCX Taillight - Blue Edition",
+    "category": "Tyres",
+    "vehicle": "PCX 2024",
+    "price": 100,
+    "stock": 10,
+    "image": "./images/pcx_tail.jpg",
+    "description": "This is one of the best quality tail light that you can fix to your bike. It can hold up in any extreme weather conditions without any issues. \r\n\r\nIt is also highly welcomed product by most of the teenagers from our hometown. \r\n"
+  }
+]
