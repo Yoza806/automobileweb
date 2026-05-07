@@ -1,14 +1,14 @@
 <%- include('partials/header') %>
 
 <main>
-  <section class="section admin-layout">
+  <section class="section">
   <div class="admin-topbar">
     <form method="POST" action="/admin/logout">
       <button class="btn btn-secondary" type="submit">Logout</button>
     </form>
   </div>
 
-  <div class="admin-form-panel contact-panel">
+  <div class="admin-form-panel contact-panel" style="max-width: 900px; margin: 0 auto 40px;">
     <div class="section-header">
       <p class="eyebrow">Inventory Management</p>
       <h2><%= editingProduct ? 'Update Listing' : 'Add New Product' %></h2>
@@ -87,10 +87,10 @@
     </form>
   </div>
 
-  <div class="admin-table-panel section">
+  <div class="admin-table-panel contact-panel" style="margin-top: 40px;">
     <div class="section-header">
       <p class="eyebrow">Inventory</p>
-      <h2>Current Catalog</h2>
+      <h2>Product Management List</h2>
     </div>
 
     <div class="table-wrap">

@@ -115,6 +115,7 @@ a {
 
 .nav-toggle {
   display: none;
+  align-items: center;
   width: 44px;
   height: 44px;
   border: 1px solid var(--line);
@@ -695,9 +696,16 @@ td small {
 /* Product Detail Page */
 .product-detail {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.2fr;
   gap: 60px;
   align-items: start;
+  padding: 42px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+  margin-top: 40px;
 }
 
 .product-detail img {
@@ -762,34 +770,44 @@ td small {
   padding: 42px;
 }
 
-.newsletter-form {
+/* Unified Form Styling */
+.newsletter-form,
+.filter-form,
+.admin-form {
   display: grid;
-  gap: 12px;
-}
-
-.newsletter-form label {
-  color: #dce2eb;
-  font-size: 0.9rem;
-  font-weight: 800;
+  gap: 20px;
 }
 
 .newsletter-form input,
-.newsletter-form textarea {
+.newsletter-form select,
+.newsletter-form textarea,
+.filter-form input,
+.filter-form select,
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 14px 15px;
   color: var(--text);
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.4);
   font: inherit;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .newsletter-form input:focus,
-.newsletter-form textarea:focus {
-  border-color: rgba(0, 168, 255, 0.72);
-  box-shadow: 0 0 0 4px rgba(0, 168, 255, 0.12);
+.newsletter-form select:focus,
+.newsletter-form textarea:focus,
+.filter-form input:focus,
+.filter-form select:focus,
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+  border-color: var(--blue);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 4px rgba(0, 168, 255, 0.15);
 }
 
 .form-message {
@@ -840,6 +858,11 @@ td small {
   padding-top: 24px;
   border-top: 1px solid var(--line);
   color: var(--muted);
+}
+
+.table-wrap td strong {
+  color: var(--text);
+  font-size: 1rem;
 }
 
 .payments {
@@ -909,6 +932,15 @@ td small {
   .product-detail {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-form {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
