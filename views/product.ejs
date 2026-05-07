@@ -1,6 +1,6 @@
 <%- include('partials/header') %>
 
-<section class="product-detail">
+<section class="section product-detail">
   <img src="<%= product.image %>" alt="<%= product.name %>">
   <div class="product-detail-copy">
     <p class="eyebrow"><%= product.category %></p>
@@ -14,7 +14,7 @@
       <strong class="selling-price"><%= money(product.price) %></strong>
       <span><%= product.stock %> in stock</span>
     </div>
-    <a class="button primary detail-order" href="<%= whatsappLink(product) %>" target="_blank" rel="noopener">Order through WhatsApp</a>
+    <a class="btn btn-primary detail-order" href="<%= whatsappLink(product) %>" target="_blank" rel="noopener">Order through WhatsApp</a>
   </div>
 </section>
 

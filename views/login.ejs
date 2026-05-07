@@ -1,18 +1,27 @@
 <%- include('partials/header') %>
 
-<section class="login-page">
-  <form method="POST" action="/admin/login" class="login-panel">
-    <p class="eyebrow">Admin access</p>
-    <h1>Login to manage products</h1>
-    <% if (error) { %>
-      <p class="form-error">Incorrect password. Please try again.</p>
-    <% } %>
-    <label>
-      <span>Password</span>
-      <input type="password" name="password" required autofocus>
-    </label>
-    <button class="button primary" type="submit">Login</button>
-  </form>
-</section>
+<main>
+  <section class="section login-section">
+    <div class="contact-panel login-panel-wrapper">
+      <div class="section-header">
+        <p class="eyebrow">Admin access</p>
+        <h2>Management Login</h2>
+      </div>
+      
+      <form method="POST" action="/admin/login" class="newsletter-form">
+        <% if (error) { %>
+          <p class="form-message" style="color: #ff4444; margin-bottom: 10px;">Incorrect password. Please try again.</p>
+        <% } %>
+        
+        <div class="form-group">
+          <label for="password">Administrator Password</label>
+          <input id="password" type="password" name="password" placeholder="Enter your password" required autofocus>
+        </div>
+        
+        <button class="btn btn-primary" type="submit">Login to Dashboard</button>
+      </form>
+    </div>
+  </section>
+</main>
 
 <%- include('partials/footer') %>

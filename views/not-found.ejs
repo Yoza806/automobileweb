@@ -1,9 +1,17 @@
 <%- include('partials/header') %>
 
-<section class="empty-state">
-  <h1>Page not found</h1>
-  <p>The product or page you requested is not available.</p>
-  <a class="button primary" href="/">Back to shop</a>
-</section>
+<main>
+  <section class="section empty-state-section">
+    <div class="section-header">
+      <p class="eyebrow">404 Error</p>
+      <h2>Page not found</h2>
+    </div>
+    <p class="hero-copy">The product or page you requested is not available. It might have been moved or removed from our inventory.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/shop">Browse Shop</a>
+      <a class="btn btn-secondary" href="/">Back to Home</a>
+    </div>
+  </section>
+</main>
 
 <%- include('partials/footer') %>

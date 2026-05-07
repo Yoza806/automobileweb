@@ -531,6 +531,222 @@ h3 {
 
 .cta-banner h2 {
   margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.admin-topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 32px;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text);
+}
+
+th, td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+
+td strong {
+  display: block;
+  font-size: 1.1rem;
+}
+
+td small {
+  color: var(--muted);
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-danger {
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+}
+
+.btn-danger:hover {
+  background: #ff4444;
+  color: white;
+}
+
+/* Shop Page Specifics */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.filters-section {
+  padding-bottom: 0;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+.filter-form .form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.product-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow);
+  border-color: rgba(0, 168, 255, 0.3);
+}
+
+.product-card img {
+  height: 220px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.product-card-body {
+  padding: 20px;
+}
+
+.product-category {
+  font-size: 0.7rem;
+  color: var(--blue);
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 20px 0;
+}
+
+.original-price {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.stock-badge {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.card-actions {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+}
+
+/* Product Detail Page */
+.product-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.product-detail img {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.detail-vehicle {
+  font-size: 1.25rem;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.detail-price {
+  margin: 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.selling-price {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+/* Login and Empty State Layouts */
+.login-section {
+  display: flex;
+  justify-content: center;
+  padding: 120px 0;
+}
+
+.login-panel-wrapper.contact-panel {
+  grid-template-columns: 1fr;
+  max-width: 540px;
+}
+
+.empty-state-section {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 160px 0;
+}
+
+.empty-state-section .section-header {
+  margin-bottom: 24px;
 }
 
 .cta-banner p {
@@ -689,6 +905,11 @@ h3 {
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .product-detail {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 }
 
 @media (max-width: 700px) {
@@ -759,4 +980,3 @@ h3 {
     width: auto;
   }
 }
-
