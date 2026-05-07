@@ -1,4 +1,5 @@
 const header = document.querySelector(".site-header");
+const logo = document.querySelector(".logo");
 const navToggle = document.querySelector(".nav-toggle");
 const navMenu = document.querySelector(".nav-menu");
 const navLinks = document.querySelectorAll(".nav-menu a");
@@ -39,6 +40,13 @@ updateHeader();
 navToggle.addEventListener("click", () => {
   setMenu(!navMenu.classList.contains("is-open"));
 });
+
+if (logo) {
+  logo.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = "/";
+  });
+}
 
 navLinks.forEach((link) => {
   link.addEventListener("click", (e) => {

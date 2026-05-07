@@ -717,7 +717,10 @@ td small {
 
 /* Compact Admin Dashboard UI */
 .admin-dashboard-container {
-  padding-top: 40px;
+  max-width: 1260px;
+  margin: 64px auto;
+  padding-inline: clamp(20px, 6vw, 60px);
+  padding-bottom: 100px;
 }
 
 .admin-header {
@@ -729,13 +732,14 @@ td small {
 
 .admin-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns:1fr;
   gap: 24px;
   align-items: start;
 }
 
 .admin-form-card {
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .admin-card {
@@ -749,6 +753,16 @@ td small {
 
 .section-header.small {
   margin-bottom: 20px;
+}
+
+.admin-form label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .section-header.small h3 {
@@ -771,15 +785,34 @@ td small {
 
 .admin-table th {
   background: rgba(255, 255, 255, 0.02);
-  padding: 12px 16px;
+  transition: background 0.2s ease;
   padding: 16px;
   border-bottom: 2px solid var(--line);
+  transition: background 0.2s ease;
 }
 
 .admin-table td {
-  padding: 12px 16px;
+  
   vertical-align: middle;
   padding: 16px;
+}
+
+.admin-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+@media (min-width: 1150px) {
+  .admin-grid {
+    grid-template-columns: 420px 1fr;
+  }
+  .admin-form-card {
+    position: sticky;
+    top: 100px;
+  }
 }
 
 .product-cell {
@@ -1006,11 +1039,6 @@ td small {
   color: var(--muted);
 }
 
-.table-wrap td strong {
-  color: var(--text);
-  font-size: 1rem;
-}
-
 .payments {
   display: flex;
   flex-wrap: wrap;
@@ -1096,8 +1124,9 @@ td small {
   .hero-content,
   .footer-grid,
   .footer-bottom,
-  .cta-banner {
-    width: min(100% - 28px, 1180px);
+  .cta-banner,
+  .admin-dashboard-container {
+    width: min(100% - 40px, 1180px);
   }
 
   .hero {
