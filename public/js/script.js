@@ -41,7 +41,21 @@ navToggle.addEventListener("click", () => {
 });
 
 navLinks.forEach((link) => {
-  link.addEventListener("click", () => setMenu(false));
+  link.addEventListener("click", (e) => {
+    setMenu(false);
+    const text = link.textContent.trim().toLowerCase();
+    const href = link.getAttribute("href");
+    const isHomePage = window.location.pathname === "/";
+
+    if (text === 'shop') {
+      e.preventDefault();
+      window.location.href = '/shop';
+    } else if (href && href.startsWith('#') && !isHomePage) {
+      // Redirect to home page with the section hash if we are currently on /shop or other pages
+      e.preventDefault();
+      window.location.href = '/' + href;
+    }
+  });
 });
 
 carouselButtons.forEach((button) => {
@@ -58,7 +72,5 @@ if (testimonialCards.length) {
 
 newsletterForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const name = new FormData(newsletterForm).get("name").trim();
-  formMessage.textContent = `Thanks, ${name}. Your request is ready for seller confirmation.`;
-  newsletterForm.reset();
+  window.location.href = "/shop";
 });

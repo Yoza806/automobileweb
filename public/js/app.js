@@ -8,3 +8,11 @@ if (menuToggle && siteNav) {
   });
 }
 
+// Handle the shop redirect for navigation links only
+document.querySelectorAll('.site-nav a').forEach(el => {
+  if (el.textContent.trim().toLowerCase() === 'shop') {
+    el.addEventListener('click', () => {
+      window.location.href = '/shop';
+    });
+  }
+});

@@ -545,7 +545,7 @@ h3 {
 
 .admin-layout {
   display: grid;
-  grid-template-columns: 420px 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
@@ -563,18 +563,29 @@ h3 {
   width: 100%;
   overflow-x: auto;
   margin-top: 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  color: var(--text);
+  table-layout: fixed;
+  table-layout: auto;
+  min-width: 900px; /* Ensures the table doesn't get too compressed */
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 th, td {
   padding: 16px;
+  padding: 18px 16px;
   text-align: left;
   border-bottom: 1px solid var(--line);
+  vertical-align: middle;
 }
 
 th {
@@ -583,11 +594,21 @@ th {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 800;
+  background: rgba(255, 255, 255, 0.01);
+  white-space: nowrap;
 }
 
 td strong {
   display: block;
   font-size: 1.1rem;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+td .price-value {
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--blue);
 }
 
 td small {
@@ -597,6 +618,7 @@ td small {
 .table-actions {
   display: flex;
   gap: 8px;
+  justify-content: flex-end;
 }
 
 .btn-danger {
@@ -691,6 +713,130 @@ td small {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 10px;
+}
+
+/* Compact Admin Dashboard UI */
+.admin-dashboard-container {
+  padding-top: 40px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.admin-form-card {
+  width: 100%;
+}
+
+.admin-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+}
+
+.section-header.small {
+  margin-bottom: 20px;
+}
+
+.section-header.small h3 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.compact-form .form-group {
+  margin-bottom: 14px;
+}
+
+.form-preview-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+}
+
+.admin-table th {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 12px 16px;
+  padding: 16px;
+  border-bottom: 2px solid var(--line);
+}
+
+.admin-table td {
+  padding: 12px 16px;
+  vertical-align: middle;
+  padding: 16px;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-thumb {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(0, 168, 255, 0.1);
+  color: var(--blue);
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stock-status {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.stock-status.low {
+  color: var(--orange);
+}
+
+.btn-small {
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 0.85rem;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  min-height: unset;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.text-right {
+  text-align: right;
 }
 
 /* Product Detail Page */
