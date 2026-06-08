@@ -51,7 +51,8 @@ const upload = multer({
 async function uploadToR2(file) {
   if (!file) return null;
   
-  const fileName = `products/${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`;
+  const fileExtension = path.extname(file.originalname);
+  const fileName = `products/${crypto.randomBytes(8).toString('hex')}-${Date.now()}${fileExtension}`;
   const command = new PutObjectCommand({
     Bucket: process.env.R2_BUCKET_NAME,
     Key: fileName,
@@ -138,15 +139,23 @@ function money(value) {
 function mapProduct(row) {
   if (!row) return null;
   
-  // Ensure local image paths are root-relative to fix broken images on nested routes
-  let image = row.image;
-  if (image && !image.includes('://') && !image.startsWith('/')) {
-    image = '/' + image;
+  // Handle migration from single 'image' to 'images' array
+  let imagesArr = [];
+  if (Array.isArray(row.images)) {
+    imagesArr = row.images;
+  } else if (row.image) {
+    imagesArr = [row.image];
   }
+
+  const images = imagesArr.map(img => {
+    if (img && !img.includes('://') && !img.startsWith('/')) return '/' + img;
+    return img;
+  });
 
   return {
     ...row,
-    image,
+    images: images.length > 0 ? images : ['/images/placeholder.png'],
+    image: images[0] || '/images/placeholder.png', // Backward compatibility for single-image views
     originalPrice: row.original_price ? Number(row.original_price) : 0,
     price: Number(row.price)
   };
@@ -331,7 +340,7 @@ app.get('/admin/edit/:id', requireAdmin, async (req, res) => {
   }
 });
 
-app.post('/admin/products', requireAdmin, csrfProtection, upload.single('image'), productValidation, async (req, res) => {
+app.post('/admin/products', requireAdmin, csrfProtection, upload.array('images', 3), productValidation, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Log detailed errors to console for the developer
@@ -344,15 +353,16 @@ app.post('/admin/products', requireAdmin, csrfProtection, upload.single('image')
   try {
     const { name, category, vehicle, originalPrice, sellingPrice, stock, description } = req.body;
     
-    if (!req.file) {
-      return res.status(400).send('Product image is required.');
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).send('At least one product image is required.');
     }
 
-    // Upload image to R2 and get the URL
-    const imageUrl = await uploadToR2(req.file);
+    // Upload images to R2 and get URLs
+    const imagePromises = req.files.map(file => uploadToR2(file));
+    const imageUrls = await Promise.all(imagePromises);
 
     const query = `
-      INSERT INTO products (name, category, vehicle, original_price, price, stock, image, description)
+      INSERT INTO products (name, category, vehicle, original_price, price, stock, images, description)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
     const values = [
@@ -362,7 +372,7 @@ app.post('/admin/products', requireAdmin, csrfProtection, upload.single('image')
       Number(originalPrice) || 0, 
       Number(sellingPrice), 
       Number(stock), 
-      imageUrl, 
+      imageUrls, 
       description
     ];
     
@@ -374,7 +384,7 @@ app.post('/admin/products', requireAdmin, csrfProtection, upload.single('image')
   }
 });
 
-app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.single('image'), productValidation, async (req, res) => {
+app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.array('images', 3), productValidation, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Log detailed errors to console for the developer
@@ -387,13 +397,17 @@ app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.sing
   try {
     const { name, category, vehicle, originalPrice, sellingPrice, stock, description } = req.body;
     
-    // If a new file was uploaded, process it
-    const newImageUrl = await uploadToR2(req.file);
+    // If new files were uploaded, process them
+    let imageUrls = null;
+    if (req.files && req.files.length > 0) {
+      const imagePromises = req.files.map(file => uploadToR2(file));
+      imageUrls = await Promise.all(imagePromises);
+    }
 
     const query = `
       UPDATE products 
       SET name = $1, category = $2, vehicle = $3, original_price = $4, price = $5, stock = $6, 
-          description = $7, image = COALESCE($8, image)
+          description = $7, images = COALESCE($8, images)
       WHERE id = $9
     `;
     const values = [
@@ -404,7 +418,7 @@ app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.sing
       Number(sellingPrice), 
       Number(stock), 
       description,
-      newImageUrl, // Will be null if no new file, COALESCE handles keeping the old one
+      imageUrls, // Will be null if no new files, COALESCE handles keeping the old ones
       req.params.id
     ];
 
@@ -418,16 +432,18 @@ app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.sing
 
 app.post('/admin/products/:id/delete', requireAdmin, csrfProtection, async (req, res) => {
   try {
-    // 1. Fetch the product's image URL before deleting the record
-    const result = await pool.query('SELECT image FROM products WHERE id = $1', [req.params.id]);
-    const imageUrl = result.rows[0]?.image;
+    // 1. Fetch the product's image URLs before deleting the record
+    const result = await pool.query('SELECT images FROM products WHERE id = $1', [req.params.id]);
+    const imageUrls = result.rows[0]?.images;
 
     // 2. Delete the record from the database
     await pool.query('DELETE FROM products WHERE id = $1', [req.params.id]);
 
-    // 3. If an image exists and is stored on R2, delete it
-    if (imageUrl) {
-      await deleteFromR2(imageUrl);
+    // 3. If images exist and are stored on R2, delete them
+    if (Array.isArray(imageUrls)) {
+      for (const url of imageUrls) {
+        await deleteFromR2(url);
+      }
     }
 
     res.redirect('/admin');
