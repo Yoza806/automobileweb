@@ -7,6 +7,8 @@ const testimonialCards = [...document.querySelectorAll(".testimonial-card")];
 const carouselButtons = document.querySelectorAll(".carousel-btn");
 const newsletterForm = document.querySelector("#newsletterForm");
 const formMessage = document.querySelector("#formMessage");
+const preorderTab = document.querySelector(".preorder-tab");
+const preorderClose = document.querySelector(".close-btn");
 
 let activeReview = 0;
 let reviewTimer;
@@ -78,7 +80,19 @@ if (testimonialCards.length) {
   startReviewTimer();
 }
 
-newsletterForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  window.location.href = "/shop";
-});
+if (newsletterForm) {
+  newsletterForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    window.location.href = "/shop";
+  });
+}
+
+function togglePreorder() {
+  const popup = document.querySelector(".preorder-popup") || document.getElementById("preorderPopup");
+  if (popup) {
+    popup.classList.toggle("active");
+  }
+}
+
+preorderTab?.addEventListener("click", togglePreorder);
+preorderClose?.addEventListener("click", togglePreorder);
