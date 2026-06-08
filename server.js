@@ -20,7 +20,7 @@ const app = express();
 const PORT = process.env.PORT || 5820;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 const ADMIN_TOKEN = crypto.createHash('sha256').update(ADMIN_PASSWORD).digest('hex');
-const WHATSAPP_NUMBER = process.env.WHATSAPP_NUMBER || '94771234567';
+const WHATSAPP_NUMBER = process.env.WHATSAPP_NUMBER;
 
 
 //cloudflare connection
@@ -211,7 +211,7 @@ const productValidation = [
 ];
 
 function whatsappLink(product) {
-  const message = `Hello GearHub, I want to order ${product.name} for ${product.vehicle}. Selling Price: ${money(product.price)}.`;
+  const message = `Hello EzyParts.lk, I want to order ${product.name} for ${product.vehicle}. Selling Price: ${money(product.price)}.`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
@@ -221,7 +221,7 @@ app.locals.whatsappLink = whatsappLink;
 
 app.get('/', (req, res) => {
   res.render('index', {
-    title: 'GearHub Auto Parts | Professional Vehicle Solutions'
+    title: 'EzyParts.lk - Vehicle Parts'
   });
 });
 
@@ -241,7 +241,7 @@ app.get('/shop', async (req, res) => {
     const mappedProducts = result.rows.map(mapProduct);
 
     res.render('shop', {
-      title: 'Shop Parts - GearHub',
+      title: 'Shop Parts - EzyParts.lk',
       products: mappedProducts,
       selectedCategory,
       search: req.query.search || ''
@@ -341,6 +341,7 @@ app.get('/admin/edit/:id', requireAdmin, async (req, res) => {
 });
 
 app.post('/admin/products', requireAdmin, csrfProtection, upload.array('images', 3), productValidation, async (req, res) => {
+app.post('/admin/products', requireAdmin, csrfProtection, upload.any(), productValidation, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Log detailed errors to console for the developer
@@ -355,6 +356,10 @@ app.post('/admin/products', requireAdmin, csrfProtection, upload.array('images',
     
     if (!req.files || req.files.length === 0) {
       return res.status(400).send('At least one product image is required.');
+    }
+
+    if (req.files.length > 3) {
+      return res.status(400).send('You can upload a maximum of 3 images per product.');
     }
 
     // Upload images to R2 and get URLs
@@ -385,6 +390,7 @@ app.post('/admin/products', requireAdmin, csrfProtection, upload.array('images',
 });
 
 app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.array('images', 3), productValidation, async (req, res) => {
+app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.any(), productValidation, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Log detailed errors to console for the developer
@@ -400,6 +406,9 @@ app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.arra
     // If new files were uploaded, process them
     let imageUrls = null;
     if (req.files && req.files.length > 0) {
+      if (req.files.length > 3) {
+        return res.status(400).send('You can upload a maximum of 3 images per product.');
+      }
       const imagePromises = req.files.map(file => uploadToR2(file));
       imageUrls = await Promise.all(imagePromises);
     }
@@ -450,8 +459,22 @@ app.post('/admin/products/:id/delete', requireAdmin, csrfProtection, async (req,
   } catch (err) {
     console.error('Delete Error:', err);
     res.status(500).send('Database Error');
+// Error handling for Multer and other middleware
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).send('File too large. Maximum size is 5MB.');
+    }
+    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+      return res.status(400).send('Unexpected field in form. Please check your file input names.');
+    }
+    return res.status(400).send(`Upload error: ${err.message}`);
   }
+  
+  console.error('Unhandled Error:', err);
+  res.status(500).send('An internal server error occurred.');
 });
+
 app.listen(PORT, () => {
   console.log(`Vehicle parts ecommerce app running at http://localhost:${PORT}`);
 });

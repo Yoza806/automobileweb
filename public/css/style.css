@@ -219,13 +219,15 @@ p {
 
     width:280px;
 
-    background:white;
+    background: var(--panel);
+    border: 1px solid var(--line);
 
     padding:20px;
 
     border-radius:15px;
 
-    box-shadow:0 0 20px rgba(0,0,0,.2);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(20px);
 
     transition:.3s;
 
@@ -250,6 +252,7 @@ p {
 
     font-size:20px;
 
+    color: var(--text);
 }
 
 
