@@ -84,11 +84,7 @@ async function deleteFromR2(imageUrl) {
 
 // Database Connection Pool
 const pool = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
+    connectionString: process.env.DATABASE_URL
 });
 
 pool.on('error', (err) => {
@@ -207,7 +203,10 @@ const productValidation = [
   body('originalPrice').optional({ values: 'falsy' }).isFloat({ min: 0 }),
   body('sellingPrice').isFloat({ min: 0 }),
   body('stock').isInt({ min: 0 }),
-  body('description').trim().isLength({ min: 10 }).escape()
+  body('description')
+    .trim()
+    .isLength({ min: 10 }).withMessage('Description must be at least 10 characters long.')
+    .escape()
 ];
 
 function whatsappLink(product) {
