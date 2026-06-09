@@ -142,3 +142,21 @@ function updateThumbnails(gallery, activeIndex) {
     thumb.classList.toggle('active', i === activeIndex);
   });
 };
+
+// Initialize Event Listeners for Carousel and Thumbnails (CSP Friendly)
+document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('click', (e) => {
+    // Handle Carousel Arrows
+    const arrow = e.target.closest('.carousel-arrow');
+    if (arrow) {
+      const direction = arrow.classList.contains('next') ? 1 : -1;
+      window.cycleImage(arrow, direction, e);
+    }
+
+    // Handle Thumbnail Clicks
+    const thumb = e.target.closest('.thumbnail-item');
+    if (thumb && thumb.dataset.index !== undefined) {
+      window.setProductImage(thumb, parseInt(thumb.dataset.index));
+    }
+  });
+});

@@ -6,14 +6,14 @@
       <div class="img-carousel-container" data-images="<%= product.images.filter(img => !!img).join(',') %>" data-current-index="0">
         <img src="<%= product.image %>" alt="<%= product.name %>" class="carousel-img">
         <% if (product.images.length > 1) { %>
-          <button type="button" class="carousel-arrow prev" onclick="cycleImage(this, -1, event)">‹</button>
-          <button type="button" class="carousel-arrow next" onclick="cycleImage(this, 1, event)">›</button>
+          <button type="button" class="carousel-arrow prev">‹</button>
+          <button type="button" class="carousel-arrow next">›</button>
         <% } %>
       </div>
       <% if (product.images.length > 1) { %>
         <div class="thumbnail-grid">
           <% product.images.forEach((img, index) => { %>
-            <button type="button" class="thumbnail-item <%= index === 0 ? 'active' : '' %>" onclick="setProductImage(this, <%= index %>)">
+            <button type="button" class="thumbnail-item <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>">
               <img src="<%= img %>" alt="">
             </button>
           <% }) %>
