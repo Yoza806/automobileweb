@@ -90,7 +90,13 @@
             <tr>
               <td>
                 <div style="display: flex; align-items: center; gap: 12px;">
-                  <img src="<%= product.image %>" alt="" style="width: 44px; height: 44px; border-radius: 6px; object-fit: cover; border: 1px solid var(--line);">
+                  <div class="img-carousel-container" data-images="<%= product.images.filter(img => !!img).join(',') %>">
+                    <img src="<%= product.image %>" alt="" class="carousel-img">
+                    <% if (product.images.length > 1) { %>
+                      <button type="button" class="carousel-arrow prev" onclick="cycleImage(this, -1)">‹</button>
+                      <button type="button" class="carousel-arrow next" onclick="cycleImage(this, 1)">›</button>
+                    <% } %>
+                  </div>
                   <div>
                     <strong style="display: block; font-size: 0.95rem;"><%= product.name %></strong>
                     <span style="font-size: 0.75rem; color: var(--muted);"><%= product.vehicle %></span>

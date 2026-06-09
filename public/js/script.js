@@ -14,15 +14,16 @@ let activeReview = 0;
 let reviewTimer;
 
 function updateHeader() {
-  header.classList.toggle("is-scrolled", window.scrollY > 16);
+  if (header) header.classList.toggle("is-scrolled", window.scrollY > 16);
 }
 
 function setMenu(open) {
-  navMenu.classList.toggle("is-open", open);
-  navToggle.setAttribute("aria-expanded", String(open));
+  if (navMenu) navMenu.classList.toggle("is-open", open);
+  if (navToggle) navToggle.setAttribute("aria-expanded", String(open));
 }
 
 function showReview(index) {
+  if (!testimonialCards.length) return;
   activeReview = (index + testimonialCards.length) % testimonialCards.length;
   testimonialCards.forEach((card, cardIndex) => {
     card.classList.toggle("is-active", cardIndex === activeReview);
@@ -30,6 +31,7 @@ function showReview(index) {
 }
 
 function startReviewTimer() {
+  if (!testimonialCards.length) return;
   window.clearInterval(reviewTimer);
   reviewTimer = window.setInterval(() => {
     showReview(activeReview + 1);
@@ -39,20 +41,18 @@ function startReviewTimer() {
 window.addEventListener("scroll", updateHeader);
 updateHeader();
 
-navToggle.addEventListener("click", () => {
+navToggle?.addEventListener("click", () => {
   setMenu(!navMenu.classList.contains("is-open"));
 });
 
-if (logo) {
-  logo.addEventListener("click", (e) => {
-    e.preventDefault();
-    window.location.href = "/";
-  });
-}
+logo?.addEventListener("click", (e) => {
+  e.preventDefault();
+  window.location.href = "/";
+});
 
 navLinks.forEach((link) => {
   link.addEventListener("click", (e) => {
-    setMenu(false);
+    if (navMenu?.classList.contains("is-open")) setMenu(false);
     const text = link.textContent.trim().toLowerCase();
     const href = link.getAttribute("href");
     const isHomePage = window.location.pathname === "/";
@@ -96,3 +96,49 @@ function togglePreorder() {
 
 preorderTab?.addEventListener("click", togglePreorder);
 preorderClose?.addEventListener("click", togglePreorder);
+
+// Product Image Carousel Logic
+window.cycleImage = function(btn, dir, event) {
+  if (event && event.stopPropagation) event.stopPropagation();
+  
+  // Debugging log: remove once confirmed working
+  console.log('Carousel clicked:', dir);
+
+  const container = btn.closest('.img-carousel-container');
+  const imagesAttr = container ? container.getAttribute('data-images') : null;
+  if (!container || !imagesAttr) return;
+
+  const img = container.querySelector('img');
+  const images = imagesAttr.split(',').filter(url => !!url);
+  
+  if (images.length <= 1) return;
+
+  // Reliability: Use attribute directly to track state
+  let currentIndex = parseInt(container.getAttribute('data-current-index') || '0');
+  const nextIdx = (currentIndex + dir + images.length) % images.length;
+  
+  container.setAttribute('data-current-index', nextIdx);
+  if (img) img.src = images[nextIdx];
+
+  // Sync with product detail thumbnails if they exist
+  const gallery = container.closest('.product-gallery');
+  if (gallery) updateThumbnails(gallery, nextIdx);
+};
+
+window.setProductImage = function(thumbBtn, index) {
+  const gallery = thumbBtn.closest('.product-gallery');
+  const container = gallery.querySelector('.img-carousel-container');
+  const img = container.querySelector('img');
+  const images = container.dataset.images.split(',').filter(url => !!url);
+  
+  img.src = images[index];
+  container.setAttribute('data-current-index', index); // Keep the carousel index in sync with the thumbnail
+  updateThumbnails(gallery, index);
+};
+
+function updateThumbnails(gallery, activeIndex) {
+  const thumbnails = gallery.querySelectorAll('.thumbnail-item');
+  thumbnails.forEach((thumb, i) => {
+    thumb.classList.toggle('active', i === activeIndex);
+  });
+};

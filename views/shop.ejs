@@ -35,7 +35,13 @@
   <div class="product-grid">
     <% products.forEach((product) => { %>
       <article class="product-card">
-        <img src="<%= product.image %>" alt="<%= product.name %>">
+        <div class="img-carousel-container" data-images="<%= product.images.filter(img => !!img).join(',') %>" data-current-index="0">
+          <img src="<%= product.image %>" alt="<%= product.name %>" class="carousel-img">
+          <% if (product.images.length > 1) { %>
+            <button type="button" class="carousel-arrow prev" onclick="cycleImage(this, -1, event)">‹</button>
+            <button type="button" class="carousel-arrow next" onclick="cycleImage(this, 1, event)">›</button>
+          <% } %>
+        </div>
         <div class="product-card-body">
           <p class="product-category"><%= product.category %></p>
           <h3><%= product.name %></h3>

@@ -912,6 +912,114 @@ td small {
   border: 1px solid var(--line);
 }
 
+/* Image Carousel Component */
+.img-carousel-container {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Specific sizing for admin table thumb */
+.admin-table .img-carousel-container {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+/* Carousel sizing for Shop and Product Detail */
+.product-card .img-carousel-container {
+  height: 220px;
+  width: 100%;
+}
+
+.product-detail .img-carousel-container {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* Product Gallery & Thumbnails */
+.product-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.thumbnail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.thumbnail-item {
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 0.6;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.thumbnail-item:hover, .thumbnail-item.active {
+  opacity: 1;
+  border-color: var(--blue);
+}
+
+.carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.2s ease;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+  z-index: 2;
+}
+
+.product-detail .carousel-arrow {
+  width: 44px;
+  font-size: 24px;
+}
+
+.admin-table .carousel-arrow {
+  width: 14px;
+  font-size: 10px;
+}
+
+.img-carousel-container:hover .carousel-arrow {
+  opacity: 1;
+}
+
+.carousel-arrow.prev { left: 0; }
+.carousel-arrow.next { right: 0; }
+
+.carousel-arrow:hover {
+  background: var(--blue);
+}
+
 .tag {
   display: inline-block;
   padding: 2px 8px;

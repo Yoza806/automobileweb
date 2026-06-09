@@ -2,7 +2,24 @@
 
 <section class="section">
   <div class="product-detail">
-    <img src="<%= product.image %>" alt="<%= product.name %>">
+    <div class="product-gallery">
+      <div class="img-carousel-container" data-images="<%= product.images.filter(img => !!img).join(',') %>" data-current-index="0">
+        <img src="<%= product.image %>" alt="<%= product.name %>" class="carousel-img">
+        <% if (product.images.length > 1) { %>
+          <button type="button" class="carousel-arrow prev" onclick="cycleImage(this, -1, event)">‹</button>
+          <button type="button" class="carousel-arrow next" onclick="cycleImage(this, 1, event)">›</button>
+        <% } %>
+      </div>
+      <% if (product.images.length > 1) { %>
+        <div class="thumbnail-grid">
+          <% product.images.forEach((img, index) => { %>
+            <button type="button" class="thumbnail-item <%= index === 0 ? 'active' : '' %>" onclick="setProductImage(this, <%= index %>)">
+              <img src="<%= img %>" alt="">
+            </button>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
     <div class="product-detail-copy">
     <p class="eyebrow"><%= product.category %></p>
     <h1><%= product.name %></h1>
