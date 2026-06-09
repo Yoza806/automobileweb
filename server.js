@@ -341,7 +341,6 @@ app.get('/admin/edit/:id', requireAdmin, async (req, res) => {
 });
 
 app.post('/admin/products', requireAdmin, csrfProtection, upload.array('images', 3), productValidation, async (req, res) => {
-app.post('/admin/products', requireAdmin, csrfProtection, upload.any(), productValidation, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Log detailed errors to console for the developer
@@ -390,7 +389,6 @@ app.post('/admin/products', requireAdmin, csrfProtection, upload.any(), productV
 });
 
 app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.array('images', 3), productValidation, async (req, res) => {
-app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.any(), productValidation, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Log detailed errors to console for the developer
@@ -442,11 +440,18 @@ app.post('/admin/products/:id/update', requireAdmin, csrfProtection, upload.any(
 app.post('/admin/products/:id/delete', requireAdmin, csrfProtection, async (req, res) => {
   try {
     // 1. Fetch the product's image URLs before deleting the record
-    const result = await pool.query('SELECT images FROM products WHERE id = $1', [req.params.id]);
+    const result = await pool.query(
+      'SELECT images FROM products WHERE id = $1',
+      [req.params.id]
+    );
+
     const imageUrls = result.rows[0]?.images;
 
     // 2. Delete the record from the database
-    await pool.query('DELETE FROM products WHERE id = $1', [req.params.id]);
+    await pool.query(
+      'DELETE FROM products WHERE id = $1',
+      [req.params.id]
+    );
 
     // 3. If images exist and are stored on R2, delete them
     if (Array.isArray(imageUrls)) {
@@ -456,25 +461,37 @@ app.post('/admin/products/:id/delete', requireAdmin, csrfProtection, async (req,
     }
 
     res.redirect('/admin');
+
   } catch (err) {
     console.error('Delete Error:', err);
     res.status(500).send('Database Error');
+  }
+});
+
+
 // Error handling for Multer and other middleware
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).send('File too large. Maximum size is 5MB.');
     }
+
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-      return res.status(400).send('Unexpected field in form. Please check your file input names.');
+      return res.status(400).send(
+        'Unexpected field in form. Please check your file input names.'
+      );
     }
+
     return res.status(400).send(`Upload error: ${err.message}`);
   }
-  
+
   console.error('Unhandled Error:', err);
   res.status(500).send('An internal server error occurred.');
 });
 
+
 app.listen(PORT, () => {
-  console.log(`Vehicle parts ecommerce app running at http://localhost:${PORT}`);
+  console.log(
+    `Vehicle parts ecommerce app running at http://localhost:${PORT}`
+  );
 });
